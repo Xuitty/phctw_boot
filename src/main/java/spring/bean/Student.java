@@ -1,21 +1,18 @@
 package spring.bean;
 
-
-import org.springframework.data.annotation.Persistent;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.stereotype.Component;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-@Persistent
+
+//@Persistent
 @Entity
 @Table(name = "student", uniqueConstraints = { @UniqueConstraint(columnNames = { "sno" }) })
 @Component
-@EntityListeners(AuditingEntityListener.class)
+//@EntityListeners(AuditingEntityListener.class)
 
 public class Student {
 	@Id
@@ -137,8 +134,6 @@ public class Student {
 	public void setCookie(String cookie) {
 		this.cookie = cookie;
 	}
-	
-	
 
 	public String getSalt() {
 		return salt;
@@ -162,7 +157,5 @@ public class Student {
 				+ ", sid=" + sid + ", cookie=" + cookie + ", salt=" + salt + ", salt_pass=" + salt_pass + ", ssex="
 				+ ssex + ", active=" + active + "]";
 	}
-
-
 
 }

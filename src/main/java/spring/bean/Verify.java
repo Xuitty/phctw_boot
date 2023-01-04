@@ -1,29 +1,25 @@
 package spring.bean;
 
-
-
-import org.springframework.data.annotation.Persistent;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.stereotype.Component;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-@Persistent
+
+//@Persistent
 @Entity
 @Table(name = "verify", uniqueConstraints = { @UniqueConstraint(columnNames = { "sno" }) })
 @Component
-@EntityListeners(AuditingEntityListener.class)
+//@EntityListeners(AuditingEntityListener.class)
 
 public class Verify {
 
 	@Id
-	@Column
+	@Column(name = "sno")
 	private String sno;
-	@Column
+	@Column(name = "verify")
 	private String verify;
 
 	public Verify() {

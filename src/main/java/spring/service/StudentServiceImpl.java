@@ -23,7 +23,9 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import spring.bean.Student;
-import spring.dao.DAOInterface;
+import spring.bean.Verify;
+import spring.dao.StudentDAOInterface;
+import spring.dao.VerifyDAOInterface;
 import spring.dao.StudentDAO;
 import spring.tools.MD5Tools;
 
@@ -32,9 +34,9 @@ import spring.tools.MD5Tools;
 public class StudentServiceImpl implements StudentService {
 	MD5Tools md5 = new MD5Tools();
 	@Autowired
-	StudentDAO dao;
+	VerifyDAOInterface verifyDAOInterface;
 	@Autowired
-	DAOInterface dao1;
+	StudentDAOInterface studentDAOInterface;
 
 	@Override
 	public List<Student> selectStudent() {
@@ -48,7 +50,7 @@ public class StudentServiceImpl implements StudentService {
 		String salt = saltGen();
 		student.setSpwd(md5.string2MD5(student.getSpwd() + salt));
 		student.setSalt_pass(salt);
-		boolean r = dao1.save(student)==null?false:true;
+		boolean r = studentDAOInterface.save(student)==null?false:true;
 		return r;
 	}
 
@@ -56,7 +58,7 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public Boolean updateStudent(Student student) {
 //		StudentDAO s = new StudentDAO();
-		Boolean r = dao1.save(student)==null?false:true;
+		Boolean r = studentDAOInterface.save(student)==null?false:true;
 		return r;
 	}
 
@@ -69,7 +71,7 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public Student queryStudent(String sno) {
 //		StudentDAO s = new StudentDAO();
-		Student r = dao1.findBySno(sno);
+		Student r = studentDAOInterface.findBySno(sno);
 		return r;
 	}
 
@@ -79,7 +81,7 @@ public class StudentServiceImpl implements StudentService {
 		// TODO Auto-generated method stub
 		String salt = queryStudent(acc).getSalt_pass();
 		pass = md5.string2MD5(pass + salt);
-		Boolean r = dao1.findBySnoAndSpwdAndActive(acc, pass, 1)==null?false:true;
+		Boolean r = studentDAOInterface.findBySnoAndSpwdAndActive(acc, pass, 1)==null?false:true;
 		return r;
 	}
 
@@ -88,22 +90,23 @@ public class StudentServiceImpl implements StudentService {
 	public Boolean writeVerify(Student student) {
 		String verify = verifyGen();
 		sendVerify(student.getSname(), student.getSmail(), verify);
-		Boolean r = dao.writeVerify(student.getSno(), verify);
+		Verify v= new Verify(student.getSno(),verify);
+		Boolean r = verifyDAOInterface.save(v)==null?false:true;
 		return r;
 	}
 
 	@Transactional
 	@Override
 	public Boolean deleteVerify(String sno) {
-		Boolean r = dao.deleteVerify(sno);
-		return r;
+		verifyDAOInterface.deleteById(sno);
+		return true;
 
 	}
 
 	@Transactional
 	@Override
 	public String queryVerify(String sno) {
-		String r = dao.queryVerify(sno);
+		String r = verifyDAOInterface.findBySno(sno).getVerify();
 		return r;
 
 	}
@@ -111,24 +114,24 @@ public class StudentServiceImpl implements StudentService {
 	@Transactional
 	@Override
 	public Boolean activeAccount(String sno) {
-		Student s = dao1.findBySno(sno);
+		Student s = studentDAOInterface.findBySno(sno);
 		s.setActive(1);
-		Boolean r = dao1.save(s)==null?false:true;
+		Boolean r = studentDAOInterface.save(s)==null?false:true;
 		return r;
 	}
 
 	@Transactional
 	@Override
 	public Boolean forgetPassword(String sno, String smail) {
-		Student s = dao1.findBySno(sno);
+		Student s = studentDAOInterface.findBySno(sno);
 		if (s.getSmail().equals(smail)) {
 			String newPassword = newPasswordGen();
 			String salt = saltGen();
 			s.setSpwd(new MD5Tools().string2MD5(newPassword + salt));
 			s.setSalt_pass(salt);
-			Boolean r = dao1.save(s)==null?false:true;
+			Boolean r = studentDAOInterface.save(s)==null?false:true;
 			System.out.println(r);
-			sendNewPassword(sno, dao1.findBySno(sno).getSmail(), newPassword);
+			sendNewPassword(sno, studentDAOInterface.findBySno(sno).getSmail(), newPassword);
 			return r == true ? true : false;
 		} else {
 			return false;
@@ -155,18 +158,21 @@ public class StudentServiceImpl implements StudentService {
 	public String addCookie(String sno) {
 		String salt = saltGen();
 		String encrypted_sno = (new MD5Tools().string2MD5(sno + salt));
-		Student s = dao1.findBySno(sno);
+		Student s = studentDAOInterface.findBySno(sno);
 		s.setCookie(encrypted_sno);
 		s.setSalt(salt);
-		String r = dao1.save(s).getCookie();
+		String r = studentDAOInterface.save(s).getCookie();
 		return r;
 	}
 
 	@Override
 	@Transactional
 	public String queryCookie(String cookie) {
+		if(cookie==null) {
+			return null;
+		}
 		System.out.println(cookie);
-		String r = (dao1.findByCookie(cookie)).getSno();
+		String r = (studentDAOInterface.findByCookie(cookie)).getSno();
 		return r;
 	}
 
@@ -407,7 +413,7 @@ public class StudentServiceImpl implements StudentService {
 		props.put("mail.smtp.socketFactory.port", "465");
 		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 		props.put("mail.smtp.socketFactory.fallback", "false");
-		Session session = Session.getDefaultInstance(props, new Authenticator() {
+		Session session = Session.getInstance(props, new Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(from, password);
 			}
@@ -458,7 +464,7 @@ public class StudentServiceImpl implements StudentService {
 		props.put("mail.smtp.socketFactory.port", "465");
 		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 		props.put("mail.smtp.socketFactory.fallback", "false");
-		Session session = Session.getDefaultInstance(props, new Authenticator() {
+		Session session = Session.getInstance(props, new Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(from, password);
 			}

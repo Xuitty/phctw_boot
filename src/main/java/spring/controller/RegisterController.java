@@ -52,6 +52,7 @@ public class RegisterController {
 				ModelAndView mv = new ModelAndView("redirect:/redirect");
 				return mv;
 			} else {
+				studentservice.deleteVerify(sno);
 				ModelAndView mv = new ModelAndView("register/resend");
 				mv.addObject("message", "驗證碼錯誤");
 //			System.out.println(sno);
@@ -61,6 +62,11 @@ public class RegisterController {
 		} else if (action.equals("resend")) {
 			Student s = new Student(sno, sname, sbday, ssex == null ? -1 : Integer.parseInt(ssex), smail, spwd, sid, 0);
 			s.setSname(studentservice.queryStudent(sno).getSname());
+			if(studentservice.queryStudent(sno).getActive()==1) {
+				ModelAndView mv = new ModelAndView("login/login2");
+				mv.addObject("message","帳號已啟用，不須重新驗證");
+				return mv;
+			}
 			studentservice.writeVerify(s);
 			ModelAndView mv = new ModelAndView("register/resend");
 			return mv;

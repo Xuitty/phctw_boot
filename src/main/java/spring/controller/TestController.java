@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import spring.bean.Student;
-import spring.dao.DAOInterface;
+import spring.dao.StudentDAOInterface;
 
 @RestController
 public class TestController {
 	@Autowired
-	DAOInterface daoInterface;
+	StudentDAOInterface daoInterface;
 	
 	@GetMapping("/test")
 	public String test() {
