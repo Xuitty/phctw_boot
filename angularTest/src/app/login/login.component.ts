@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Student } from '../bean/student';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login',
@@ -9,13 +10,14 @@ import { Student } from '../bean/student';
 })
 export class LoginComponent implements OnInit {
   message: string = '';
+  // cookie:string ='';
   log = console.log;
   @ViewChild('sno') sno?: ElementRef;
   @ViewChild('spwd') spwd?: ElementRef;
   s: Student = new Student();
   name?: string = this.s.sname;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cookie: CookieService) {}
 
   ngOnInit(): void {
     this.log('Init');
@@ -46,7 +48,10 @@ export class LoginComponent implements OnInit {
         return;
       }
       // this.message = '歡迎 ' + data.sname;
-      location.href=('main');
+      let studentCookie = data.cookie;
+      this.cookie.set('username', studentCookie!, 7);
+      this.log('end');
+      location.href = 'main';
     });
   }
 
