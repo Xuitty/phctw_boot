@@ -22,6 +22,7 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
+import spring.Spring1Application;
 import spring.bean.Student;
 import spring.bean.Verify;
 import spring.dao.StudentDAOInterface;
@@ -405,8 +406,7 @@ public class StudentServiceImpl implements StudentService {
 		String subject = "學生管理系統註冊驗證碼";
 		String msg = "親愛的 " + sname + "，您的驗證碼為: " + verify;
 		final String from = "sopdf2@gmail.com";
-		final String password = "gtclesnkitaxafed";
-
+		final String password = Spring1Application.FUCKYOUMOROCCOIDIOTHACKER;
 		Properties props = new Properties();
 		props.setProperty("mail.transport.protocol", "smtp");
 		props.setProperty("mail.host", "smtp.gmail.com");
@@ -456,7 +456,7 @@ public class StudentServiceImpl implements StudentService {
 		String subject = "學生管理系統補發密碼";
 		String msg = "親愛的 " + sname + "，您的新密碼為: " + newPassword;
 		final String from = "sopdf2@gmail.com";
-		final String password = "gtclesnkitaxafed";
+		final String password = Spring1Application.FUCKYOUMOROCCOIDIOTHACKER;
 
 		Properties props = new Properties();
 		props.setProperty("mail.transport.protocol", "smtp");

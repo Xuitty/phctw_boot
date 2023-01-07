@@ -23,7 +23,7 @@
           <br /><br />
           <h2>登入系統</h2>
           <br /><br />
-          <h2 style="color: red">{{message}}</h2>
+          <h2 style="color: red">{{ message }}</h2>
           <!-- <form action="login" method="post">
 				帳號: <input type="text" name="acc"><br> <br> 密碼: <input
 					type="password" name="pass"><br> <br> <input
@@ -41,6 +41,7 @@
                 name="acc"
                 aria-describedby="emailHelp"
                 placeholder="A000001"
+                (keydown.enter)="onKeyDown($event)"
               />
               <label for="exampleInputEmail1">帳號(學號)</label>
               <div id="emailHelp" class="form-text">
@@ -55,6 +56,7 @@
                 class="form-control"
                 id="exampleInputPassword1"
                 placeholder="A000001"
+                (keydown.enter)="onKeyDown($event)"
               />
               <label for="exampleInputPassword1">密碼</label>
             </div>
@@ -97,7 +99,6 @@
             type="button"
             class="btn btn-outline-secondary"
             value="測試"
-            (click)="functionTest()"
           />
         </div>
         <div class="col"></div>

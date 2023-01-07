@@ -14,13 +14,13 @@ import spring.service.StudentService;
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping
-public class TestController {
+public class AngularController {
 	Gson gson = new Gson();
 
 	@Autowired
 	StudentService studentService;
 
-	@PostMapping("test")
+	@PostMapping("login_ajax")
 	public Student test(@RequestBody String s) {
 		Student student = gson.fromJson(s, Student.class);
 		if (studentService.loginStudent(student.getSno(), student.getSpwd())) {

@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-
+@Deprecated
 @Controller
 public class LogoutController {
 

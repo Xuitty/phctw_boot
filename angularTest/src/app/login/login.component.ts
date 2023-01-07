@@ -22,8 +22,12 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.log('Init');
   }
+  onKeyDown($event: Event) {
+    this.doLogin();
+    this.log('enter triggered');
+  }
 
-  functionTest() {
+  doLogin() {
     var sno: string = this.sno?.nativeElement.value;
     var spwd: string = this.spwd?.nativeElement.value;
     let body = {
@@ -34,7 +38,7 @@ export class LoginComponent implements OnInit {
       'Content-Type': 'application/json',
       responseType: 'json',
     });
-    let url = 'http://127.0.0.1:8080/test';
+    let url = 'http://127.0.0.1:8080/login_ajax';
 
     let options = { observe: 'response' as 'response', headers: headers };
 
@@ -59,11 +63,11 @@ export class LoginComponent implements OnInit {
   //   this.log(this.s);
   // }
 
-  doLogin() {
-    this.log('login');
+  // doLogin() {
+  //   this.log('login');
 
-    //..todo
-  }
+  //   //..todo
+  // }
   goRegister() {
     this.log('register');
     //..todo

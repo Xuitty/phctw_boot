@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import spring.bean.Student;
 import spring.service.StudentService;
 import spring.service.StudentServiceImpl;
-
+@Deprecated
 @Controller
 public class LoginController {
 

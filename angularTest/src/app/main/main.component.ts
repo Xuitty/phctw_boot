@@ -11,9 +11,15 @@ import { Student } from '../bean/student';
 export class MainComponent implements OnInit {
   constructor(private http: HttpClient, private cookie: CookieService) {}
   log = console.log;
+  status: boolean = false;
   student: Student = new Student();
   ngOnInit(): void {
     let cookie_send = this.cookie.get('username');
+    this.log('username=' + cookie_send);
+    if (cookie_send == null || cookie_send == '') {
+      location.href = '/';
+      return;
+    }
     let body = { cookie: cookie_send };
     let url = 'http://127.0.0.1:8080/main_ajax';
     this.http.post<Student>(url, body).subscribe((data) => {
@@ -23,11 +29,12 @@ export class MainComponent implements OnInit {
       this.sid = data.sid;
       this.sbday = data.sbday;
       this.ssex = data.ssex == 0 ? '女' : '男';
+      this.status = true;
       // this.log(this.student);
     });
   }
-  doLogOut() {
-    this.cookie.deleteAll;
+  doLogout() {
+    this.cookie.deleteAll();
     location.href = '/';
   }
 

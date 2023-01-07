@@ -13,7 +13,7 @@ import spring.bean.Student;
 import spring.service.StudentService;
 import spring.tools.IdVerify;
 
-
+@Deprecated
 @Controller
 public class AjaxController {
 

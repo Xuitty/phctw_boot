@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import spring.bean.Student;
 import spring.service.StudentService;
-
+@Deprecated
 @Controller
 public class RegisterController {
 

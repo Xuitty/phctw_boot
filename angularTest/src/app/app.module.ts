@@ -10,6 +10,7 @@ import { LoginComponent } from './login/login.component';
 import { TitleSenderService } from './service/title-sender.service';
 import { MainComponent } from './main/main.component';
 import { DataService } from './service/data.service';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { DataService } from './service/data.service';
     IndexComponent,
     LoginComponent,
     MainComponent,
+    RegisterComponent,
   ],
   imports: [BrowserModule, HttpClientModule, AppRoutingModule],
   providers: [TitleSenderService, DataService],
