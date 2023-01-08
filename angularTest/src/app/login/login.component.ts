@@ -69,8 +69,7 @@ export class LoginComponent implements OnInit {
   //   //..todo
   // }
   goRegister() {
-    this.log('register');
-    //..todo
+    location.href = 'register';
   }
   goForgetPassword() {
     this.log('forgetPassword');
