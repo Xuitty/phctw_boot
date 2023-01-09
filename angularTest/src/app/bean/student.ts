@@ -1,5 +1,5 @@
 export class Student {
-    
+
     sno?:string
     sname?:string
     sbday?:string

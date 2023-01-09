@@ -11,6 +11,7 @@ import { TitleSenderService } from './service/title-sender.service';
 import { MainComponent } from './main/main.component';
 import { DataService } from './service/data.service';
 import { RegisterComponent } from './register/register.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,8 +22,9 @@ import { RegisterComponent } from './register/register.component';
     MainComponent,
     RegisterComponent,
   ],
-  imports: [BrowserModule, HttpClientModule, AppRoutingModule],
+  imports: [BrowserModule, HttpClientModule, AppRoutingModule, FormsModule],
   providers: [TitleSenderService, DataService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
+//
