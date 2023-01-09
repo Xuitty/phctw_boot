@@ -43,15 +43,20 @@ public class AngularController {
 
 	@PostMapping("registerCheck")
 	public String registerCheck(@RequestBody String s) {
+		System.out.println(s);
 		Student student = gson.fromJson(s, Student.class);
 		System.out.println("in: " + student.toString());
 		String result = null;
-		if(student.getSid()==null || student.getSno()==null) {
+		if(student.getSid()==null || student.getSno()==null||student.getSid().equals("") || student.getSno().equals("")) {
 			result="somethingEmpty";
 			return result;
 		}
 		if (studentService.queryStudent(student.getSno()) != null) {
 			result = "duplicatedSno";
+			return result;
+		}
+		if (studentService.queryStudentBySid(student.getSid()) != null) {
+			result = "duplicatedSid";
 			return result;
 		}
 		if (idVerify.idCardVerification(student.getSid()) == false) {

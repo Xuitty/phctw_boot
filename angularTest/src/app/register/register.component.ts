@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Student } from '../bean/student';
 import { CookieService } from 'ngx-cookie-service';
+import { lastValueFrom, Observable, tap } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -23,8 +24,9 @@ export class RegisterComponent {
   ssex_receive?: number = 0;
   message?: string;
   s: Student = new Student();
+  // check_test?: string;
 
-  doRegister() {
+  async doRegister() {
     let s_detect: Student = new Student();
     s_detect.sno = this.sno_native?.nativeElement.value;
     s_detect.spwd = this.spwd_native?.nativeElement.value;
@@ -35,8 +37,45 @@ export class RegisterComponent {
     s_detect.smail = this.smail_native?.nativeElement.value;
     s_detect.sid = this.sid_native?.nativeElement.value;
 
-    this.log(s_detect);
-    let r: string = this.detect(s_detect, spwdc);
+    // this.log(s_detect);
+    let r = await this.detect(s_detect, spwdc);
+    this.log(r);
+    if (r == 'somethingEmpty') {
+      this.message = '有欄位沒填';
+      return;
+    }
+    if (r == 'passwordNotMatch') {
+      this.message = '密碼不一致';
+      return;
+    }
+    if (r == 'duplicatedSno') {
+      this.message = '學號重複';
+      return;
+    }
+    if (r == 'idError') {
+      this.message = '身分證錯誤';
+      return;
+    }
+    if (r == 'idSexError') {
+      this.message = '身分證錯誤';
+      return;
+    }
+    if (r == 'duplicatedSid') {
+      this.message = '身分證重複';
+      return;
+    }
+    if (r == 'passwordTooShort') {
+      this.message = '密碼過短';
+      return;
+    }
+    if (r == 'mailFormatError') {
+      this.message = '信箱格式錯誤';
+      return;
+    }
+    if (r == 'BdayError') {
+      this.message = '出生日期年份錯誤';
+      return;
+    }
 
     this.s.sno = s_detect.sno;
     this.s.spwd = s_detect.spwd;
@@ -48,21 +87,68 @@ export class RegisterComponent {
     this.message = 'register';
   }
 
-  detect(s_detect: Student, spwdc: string) {
+  async detect(s_detect: Student, spwdc: string) {
+    let result: string = '';
+    if (
+      s_detect.sno == '' ||
+      s_detect.spwd == '' ||
+      s_detect.sname == '' ||
+      s_detect.ssex == -1 ||
+      s_detect.sbday == '' ||
+      s_detect.smail == '' ||
+      s_detect.sid == ''
+    ) {
+      return 'somethingEmpty';
+    }
+    if (s_detect.spwd != spwdc) {
+      return 'passwordNotMatch';
+    }
+    if (s_detect.spwd.length < 6) {
+      return 'passwordTooShort';
+    }
+    if (!s_detect.smail?.includes('@')) {
+      return 'mailFormatError';
+    }
+    if (
+      parseInt(s_detect.sbday!.substring(0, 4)) < 1950 ||
+      parseInt(s_detect.sbday!.substring(0, 4)) > 2010
+    ) {
+      return 'BdayError';
+    }
     let url = 'http://127.0.0.1:8080/registerCheck';
     let body = {
-      sno: '123',
+      sno: s_detect.sno,
+      spwd: s_detect.spwd,
+      sname: s_detect.sname,
+      ssex: s_detect.ssex,
+      sbday: s_detect.sbday,
+      smail: s_detect.smail,
+      sid: s_detect.sid,
     };
-    this.http.post<string>(url, body).subscribe((data) => {
-      this.log(data);
-      return;
-    });
-    if (s_detect.spwd != spwdc) {
-      this.message = '密碼不一致';
-      return 'password';
-    }
-    return 'pass';
+    let options = {
+      observe: 'response' as 'response',
+      responseType: 'text',
+    };
+    let r = await lastValueFrom(
+      this.http.post(url, body, { observe: 'response', responseType: 'text' })
+    );
+    return r.body;
   }
+
+  // async checkSnoId(url: any, body: any) {
+  //   let result: HttpResponse<string>;
+  //   //  this.http
+  //   //   .post(url, body, { observe: 'response', responseType: 'text' })
+  //   //   .subscribe((data) => {
+  //   //     result = data;
+  //   //     this.log(data.body);
+  //   //     return data.body;
+  //   //   });
+  //   r = await lastValueFrom(
+  //     this.http.post(url, body, { observe: 'response', responseType: 'text' })
+  //   );
+  //   return result;
+  // }
 
   sex_select(ssex: number) {
     this.ssex_receive = ssex;

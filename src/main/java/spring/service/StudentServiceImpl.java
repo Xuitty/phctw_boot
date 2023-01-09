@@ -51,7 +51,7 @@ public class StudentServiceImpl implements StudentService {
 		String salt = saltGen();
 		student.setSpwd(md5.string2MD5(student.getSpwd() + salt));
 		student.setSalt_pass(salt);
-		boolean r = studentDAOInterface.save(student)==null?false:true;
+		boolean r = studentDAOInterface.save(student) == null ? false : true;
 		return r;
 	}
 
@@ -59,7 +59,7 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public Boolean updateStudent(Student student) {
 //		StudentDAO s = new StudentDAO();
-		Boolean r = studentDAOInterface.save(student)==null?false:true;
+		Boolean r = studentDAOInterface.save(student) == null ? false : true;
 		return r;
 	}
 
@@ -78,13 +78,21 @@ public class StudentServiceImpl implements StudentService {
 
 	@Transactional
 	@Override
+	public Student queryStudentBySid(String sid) {
+//		StudentDAO s = new StudentDAO();
+		Student r = studentDAOInterface.findBySid(sid);
+		return r;
+	}
+
+	@Transactional
+	@Override
 	public Boolean loginStudent(String acc, String pass) {
 		// TODO Auto-generated method stub
-		if(queryStudent(acc)!=null) {
-		String salt = queryStudent(acc).getSalt_pass();
-		pass = md5.string2MD5(pass + salt);
-		Boolean r = studentDAOInterface.findBySnoAndSpwdAndActive(acc, pass, 1)==null?false:true;
-		return r;
+		if (queryStudent(acc) != null) {
+			String salt = queryStudent(acc).getSalt_pass();
+			pass = md5.string2MD5(pass + salt);
+			Boolean r = studentDAOInterface.findBySnoAndSpwdAndActive(acc, pass, 1) == null ? false : true;
+			return r;
 		}
 		return false;
 	}
@@ -94,8 +102,8 @@ public class StudentServiceImpl implements StudentService {
 	public Boolean writeVerify(Student student) {
 		String verify = verifyGen();
 		sendVerify(student.getSname(), student.getSmail(), verify);
-		Verify v= new Verify(student.getSno(),verify);
-		Boolean r = verifyDAOInterface.save(v)==null?false:true;
+		Verify v = new Verify(student.getSno(), verify);
+		Boolean r = verifyDAOInterface.save(v) == null ? false : true;
 		return r;
 	}
 
@@ -120,7 +128,7 @@ public class StudentServiceImpl implements StudentService {
 	public Boolean activeAccount(String sno) {
 		Student s = studentDAOInterface.findBySno(sno);
 		s.setActive(1);
-		Boolean r = studentDAOInterface.save(s)==null?false:true;
+		Boolean r = studentDAOInterface.save(s) == null ? false : true;
 		return r;
 	}
 
@@ -133,7 +141,7 @@ public class StudentServiceImpl implements StudentService {
 			String salt = saltGen();
 			s.setSpwd(new MD5Tools().string2MD5(newPassword + salt));
 			s.setSalt_pass(salt);
-			Boolean r = studentDAOInterface.save(s)==null?false:true;
+			Boolean r = studentDAOInterface.save(s) == null ? false : true;
 			System.out.println(r);
 			sendNewPassword(sno, studentDAOInterface.findBySno(sno).getSmail(), newPassword);
 			return r == true ? true : false;
@@ -172,7 +180,7 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	@Transactional
 	public String queryCookie(String cookie) {
-		if(cookie==null) {
+		if (cookie == null) {
 			return null;
 		}
 		System.out.println(cookie);
