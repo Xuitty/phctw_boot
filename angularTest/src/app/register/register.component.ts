@@ -21,12 +21,28 @@ export class RegisterComponent {
   @ViewChild('sbday') sbday_native?: ElementRef;
   @ViewChild('smail') smail_native?: ElementRef;
   @ViewChild('sid') sid_native?: ElementRef;
-  ssex_receive?: number = 0;
+  @ViewChild('verify') verify?: ElementRef;
   message?: string;
+  action: string = 'register';
+  verifySno: string = '';
   s: Student = new Student();
   // check_test?: string;
+  ssex_receive?: number = 0;
 
+  formSwitch: string = '';
+  snoError: string = '';
+  spwdError: string = '';
+  snameError: string = '';
+  sbdayError: string = '';
+  smailError: string = '';
+  sidError: string = '';
   async doRegister() {
+    this.snoError = '';
+    this.spwdError = '';
+    this.snameError = '';
+    this.sbdayError = '';
+    this.smailError = '';
+    this.sidError = '';
     let s_detect: Student = new Student();
     s_detect.sno = this.sno_native?.nativeElement.value;
     s_detect.spwd = this.spwd_native?.nativeElement.value;
@@ -46,34 +62,42 @@ export class RegisterComponent {
     }
     if (r == 'passwordNotMatch') {
       this.message = '密碼不一致';
+      this.spwdError = 'is-invalid';
       return;
     }
     if (r == 'duplicatedSno') {
       this.message = '學號重複';
+      this.snoError = 'is-invalid';
       return;
     }
     if (r == 'idError') {
       this.message = '身分證錯誤';
+      this.sidError = 'is-invalid';
       return;
     }
     if (r == 'idSexError') {
-      this.message = '身分證錯誤';
+      this.message = '身分證&性別錯誤';
+      this.sidError = 'is-invalid';
       return;
     }
     if (r == 'duplicatedSid') {
       this.message = '身分證重複';
+      this.sidError = 'is-invalid';
       return;
     }
     if (r == 'passwordTooShort') {
       this.message = '密碼過短';
+      this.spwdError = 'is-invalid';
       return;
     }
     if (r == 'mailFormatError') {
       this.message = '信箱格式錯誤';
+      this.smailError = 'is-invalid';
       return;
     }
     if (r == 'BdayError') {
       this.message = '出生日期年份錯誤';
+      this.sbdayError = 'is-invalid';
       return;
     }
 
@@ -84,7 +108,14 @@ export class RegisterComponent {
     this.s.sbday = s_detect.sbday;
     this.s.smail = s_detect.smail;
     this.s.sid = s_detect.sid;
-    this.message = 'register';
+    this.message = '資料處理中，請稍候';
+    this.formSwitch = 'disabled';
+    r = await this.submit(this.s);
+    if (r == 'true') {
+      this.action = 'verify';
+      this.verifySno = this.s.sno!;
+      this.message = '';
+    }
   }
 
   async detect(s_detect: Student, spwdc: string) {
@@ -94,7 +125,6 @@ export class RegisterComponent {
       s_detect.spwd == '' ||
       s_detect.sname == '' ||
       s_detect.ssex == -1 ||
-      s_detect.sbday == '' ||
       s_detect.smail == '' ||
       s_detect.sid == ''
     ) {
@@ -111,7 +141,8 @@ export class RegisterComponent {
     }
     if (
       parseInt(s_detect.sbday!.substring(0, 4)) < 1950 ||
-      parseInt(s_detect.sbday!.substring(0, 4)) > 2010
+      parseInt(s_detect.sbday!.substring(0, 4)) > 2010 ||
+      s_detect.sbday == ''
     ) {
       return 'BdayError';
     }
@@ -128,6 +159,23 @@ export class RegisterComponent {
     let options = {
       observe: 'response' as 'response',
       responseType: 'text',
+    };
+    let r = await lastValueFrom(
+      this.http.post(url, body, { observe: 'response', responseType: 'text' })
+    );
+    return r.body;
+  }
+
+  async submit(student: Student) {
+    let url = 'http://127.0.0.1:8080/register_ajax';
+    let body = {
+      sno: student.sno,
+      sname: student.sname,
+      spwd: student.spwd,
+      ssex: student.ssex,
+      sbday: student.sbday,
+      smail: student.smail,
+      sid: student.sid,
     };
     let r = await lastValueFrom(
       this.http.post(url, body, { observe: 'response', responseType: 'text' })
@@ -152,5 +200,22 @@ export class RegisterComponent {
 
   sex_select(ssex: number) {
     this.ssex_receive = ssex;
+  }
+
+  async doVerify(verifySno: string) {
+    let url = 'http://127.0.0.1:8080/verify_ajax';
+    let body = {
+      sno: verifySno,
+      sid: this.verify?.nativeElement.value,
+    };
+    let r = await lastValueFrom(
+      this.http.post(url, body, { observe: 'response', responseType: 'text' })
+    );
+    if (r.body != 'false' && r.body != null && r.body != '') {
+      this.cookie.set('username', r.body, 7);
+      location.href = 'main';
+    } else {
+      this.message = '驗證失敗，請重新驗證或至首頁重寄驗證信';
+    }
   }
 }

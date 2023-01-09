@@ -1,28 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-  <head>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-      crossorigin="anonymous"
-    ></script>
-
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>學生資料管理系統</title>
-    <style></style>
-  </head>
+<ng-container *ngIf="action == 'register'">
   <body id="body">
-    <h2
-      id="result"
-      class="text-center"
-      style="color: red; size: 20px"
-    >{{message}}</h2>
+    <h2 id="result" class="text-center" style="color: red; size: 20px">
+      {{ message }}
+    </h2>
     <form action="register" method="post">
       <div class="container-fluid">
         <div class="row mb-3">
@@ -31,10 +11,11 @@
             <input
               #sno
               type="text"
-              class="form-control"
+              class="form-control {{ snoError }}"
               id="sno"
               name="sno"
               placeholder="A000001"
+              [disabled]="formSwitch"
             />
             <label for="sno">　帳號(學號)</label>
           </div>
@@ -46,10 +27,11 @@
             <input
               #spwd
               type="password"
-              class="form-control"
+              class="form-control {{ spwdError }}"
               id="spwd"
               name="spwd"
               placeholder="A000001"
+              [disabled]="formSwitch"
             />
             <label for="spwd">　密碼</label>
           </div>
@@ -61,10 +43,11 @@
             <input
               #spwdc
               type="password"
-              class="form-control"
+              class="form-control {{ spwdError }}"
               id="spwdc"
               name="spwdc"
               placeholder="A000001"
+              [disabled]="formSwitch"
             />
             <label for="spwdc">　確認密碼</label>
           </div>
@@ -76,10 +59,11 @@
             <input
               #sname
               type="text"
-              class="form-control"
+              class="form-control {{ snameError }}"
               id="sname"
               name="sname"
               placeholder="A000001"
+              [disabled]="formSwitch"
             />
             <label for="spwdc">　姓名</label>
           </div>
@@ -100,6 +84,7 @@
                 value="0"
                 (click)="sex_select(0)"
                 checked
+                [disabled]="formSwitch"
               />
               <label class="form-check-label" for="gridRadios1">女</label>
             </div>
@@ -111,6 +96,7 @@
                 id="gridRadios2"
                 value="1"
                 (click)="sex_select(1)"
+                [disabled]="formSwitch"
               />
               <label class="form-check-label" for="gridRadios2">男</label>
             </div>
@@ -125,8 +111,9 @@
               #sbday
               id="sbday"
               name="sbday"
-              class="form-control"
+              class="form-control  {{ sbdayError }}"
               type="date"
+              [disabled]="formSwitch"
             />
           </div>
           <div class="col-sm-4"></div>
@@ -137,10 +124,11 @@
             <input
               #smail
               type="email"
-              class="form-control"
+              class="form-control  {{ smailError }}"
               id="smail"
               name="smail"
               placeholder="A000001@"
+              [disabled]="formSwitch"
             />
             <label for="smail">　電子郵件</label>
           </div>
@@ -152,10 +140,11 @@
             <input
               #sid
               type="text"
-              class="form-control"
+              class="form-control {{ sidError }}"
               id="sid"
               name="sid"
               placeholder="A000001"
+              [disabled]="formSwitch"
             />
             <label for="smail">　身份證字號</label>
           </div>
@@ -168,9 +157,30 @@
             value="送出"
             class="btn btn-primary"
             (click)="doRegister()"
+            [disabled]="formSwitch"
           />
         </div>
       </div>
     </form>
   </body>
-</html>
+</ng-container>
+
+<ng-container *ngIf="action == 'verify'">
+  <body>
+    <div style="text-align: center">
+      <h2>請至您的信箱收取驗證碼完成註冊程序{{ verifySno }}</h2>
+      <br />
+      <h2 id="result" class="text-center" style="color: red; size: 20px">
+        {{ message }}
+      </h2>
+      <div>
+        <form action="register" method="post">
+          <br />
+          驗證碼:<input #verify type="text" name="verify" /><br />
+          <br />
+          <input type="button" value="送出" (click)="doVerify(verifySno)" />
+        </form>
+      </div>
+    </div>
+  </body>
+</ng-container>

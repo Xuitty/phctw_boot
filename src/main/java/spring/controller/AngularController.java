@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import spring.bean.Student;
+import spring.bean.Verify;
 import spring.service.StudentService;
 import spring.tools.IdVerify;
 
@@ -35,20 +36,21 @@ public class AngularController {
 	@PostMapping("main_ajax")
 	public Student mainAjax(@RequestBody String s) {
 		Student student = gson.fromJson(s, Student.class);
-		System.out.println("in: " + student.toString());
+//		System.out.println("in: " + student.toString());
 		student = studentService.queryStudent(studentService.queryCookie(student.getCookie()));
-		System.out.println("out: " + student.toString());
+//		System.out.println("out: " + student.toString());
 		return student;
 	}
 
 	@PostMapping("registerCheck")
 	public String registerCheck(@RequestBody String s) {
-		System.out.println(s);
+//		System.out.println(s);
 		Student student = gson.fromJson(s, Student.class);
-		System.out.println("in: " + student.toString());
+//		System.out.println("in: " + student.toString());
 		String result = null;
-		if(student.getSid()==null || student.getSno()==null||student.getSid().equals("") || student.getSno().equals("")) {
-			result="somethingEmpty";
+		if (student.getSid() == null || student.getSno() == null || student.getSid().equals("")
+				|| student.getSno().equals("")) {
+			result = "somethingEmpty";
 			return result;
 		}
 		if (studentService.queryStudent(student.getSno()) != null) {
@@ -71,4 +73,32 @@ public class AngularController {
 		result = "pass";
 		return result;
 	}
+
+	@PostMapping("register_ajax")
+	public String registerAjax(@RequestBody String s) {
+//		System.out.println(s);
+		Student student = gson.fromJson(s, Student.class);
+		student.setActive(0);
+		Boolean r1 = studentService.insertStudent(student);
+		Boolean r2 = studentService.writeVerify(student);
+		if (r1 && r2) {
+			return "true";
+		}
+		return "false";
+	}
+
+	@PostMapping("verify_ajax")
+	public String verifyAjax(@RequestBody String s) {
+		Student student = gson.fromJson(s, Student.class);
+		Verify verify = new Verify(student.getSno(), student.getSid());
+		System.out.println(studentService.queryVerify(verify.getSno()));
+		System.out.println(verify);
+		if (verify.getVerify().equals(studentService.queryVerify(verify.getSno()))) {
+			studentService.activeAccount(verify.getSno());
+			studentService.addCookie(verify.getSno());
+			return studentService.queryStudent(verify.getSno()).getCookie();
+		}
+		return "false";
+	}
+
 }
