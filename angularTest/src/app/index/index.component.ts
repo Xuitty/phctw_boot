@@ -21,7 +21,8 @@ export class IndexComponent {
     if (
       this.cookie.check('username') == true &&
       this.cookie.get('username') != '' &&
-      this.cookie.get('username') != null
+      this.cookie.get('username') != null &&
+      this.cookie.get('username') != 'undefined'
     ) {
       location.href = '/main';
       return;

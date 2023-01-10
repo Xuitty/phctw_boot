@@ -91,14 +91,46 @@ public class AngularController {
 	public String verifyAjax(@RequestBody String s) {
 		Student student = gson.fromJson(s, Student.class);
 		Verify verify = new Verify(student.getSno(), student.getSid());
-		System.out.println(studentService.queryVerify(verify.getSno()));
-		System.out.println(verify);
+		if(studentService.queryStudent(verify.getSno()).getActive()==1) {
+			return "alredyActive";
+		}
 		if (verify.getVerify().equals(studentService.queryVerify(verify.getSno()))) {
 			studentService.activeAccount(verify.getSno());
 			studentService.addCookie(verify.getSno());
+			studentService.deleteVerify(verify.getSno());
 			return studentService.queryStudent(verify.getSno()).getCookie();
 		}
 		return "false";
+	}
+	
+	@PostMapping("resend_ajax")
+	public String resendAjax(@RequestBody String s) {
+		Student student = gson.fromJson(s, Student.class);
+		if(studentService.queryStudent(student.getSno())==null) {
+			return "snoNotExist";
+		}
+		if(!(studentService.queryStudent(student.getSno()).getSmail().equals((student.getSmail())))) {
+			return "wrongSmail";
+		}
+		if(studentService.queryStudent(student.getSno()).getActive()==1) {
+			return "alredyActive";
+		}
+		studentService.writeVerify(studentService.queryStudent(student.getSno()));
+		return "true";
+	}
+	
+	@PostMapping("forgetPassword_ajax")
+	public String forgetPasswordAjax(@RequestBody String s) {
+		Student student = gson.fromJson(s, Student.class);
+		System.out.println(student);
+		if(studentService.queryStudent(student.getSno())==null) {
+			return "snoNotExist";
+		}
+		if(!(studentService.queryStudent(student.getSno()).getSmail().equals(student.getSmail()))) {
+			return "wrongSmail";
+		}
+		studentService.forgetPassword(student.getSno(), student.getSmail());
+		return "true";
 	}
 
 }

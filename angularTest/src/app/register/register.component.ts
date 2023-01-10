@@ -212,6 +212,10 @@ export class RegisterComponent {
       this.http.post(url, body, { observe: 'response', responseType: 'text' })
     );
     if (r.body != 'false' && r.body != null && r.body != '') {
+      if(r.body=='alredyActive'){
+        this.message='帳號已啟用，不須再啟用';
+        return;
+      }
       this.cookie.set('username', r.body, 7);
       location.href = 'main';
     } else {
