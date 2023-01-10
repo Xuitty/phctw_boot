@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col"></div>
-        <div class="col-3" style="text-align: center">
+        <div class="col-3 allCenter">
           <br /><br />
           <h2>登入系統</h2>
           <br /><br />
@@ -86,7 +86,7 @@
 
 <ng-container *ngIf="action == 'resend'">
   <body id="body" (keyup)="detectResend()" (click)="detectResend()">
-    <div style="text-align: center">
+    <div class="allCenter">
       <br />
       <h2>重發驗證信請填帳號信箱<br /><br />收信後填入帳號跟驗證碼</h2>
       <br />
@@ -143,13 +143,25 @@
 
 <ng-container *ngIf="action == 'forgetPassword'">
   <body>
-    <div style="text-align: center">
+    <div class="allCenter">
       <h2 style="color: red">{{ message }}</h2>
       <div>
         <form action="login" method="post">
-          帳號: <input #forgetPasswordSno type="text" name="sno" [disabled]="smailSwitch"/><br />
+          帳號:
+          <input
+            #forgetPasswordSno
+            type="text"
+            name="sno"
+            [disabled]="smailSwitch"
+          /><br />
           <br />
-          E-mail: <input #forgetPasswordSmail type="text" name="smail"[disabled]="verifySwitch" /><br />
+          E-mail:
+          <input
+            #forgetPasswordSmail
+            type="text"
+            name="smail"
+            [disabled]="verifySwitch"
+          /><br />
           <br />
           <input
             type="button"
@@ -158,8 +170,8 @@
             style="margin: 10px"
             [style.display]="resendButtonSwitch"
             (click)="doForgetPassword()"
-            />
-            <input
+          />
+          <input
             type="button"
             class="btn btn-secondary"
             value="返回"
