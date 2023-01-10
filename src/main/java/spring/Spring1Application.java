@@ -21,21 +21,21 @@ import org.springframework.web.servlet.ModelAndView;
 import jakarta.persistence.EntityManagerFactory;
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
 @ComponentScan({"spring.bean","spring.controller","spring.dao","spring.service","spring.tools"})
-@EntityScan("spring.bean")
+//@EntityScan("spring.bean")
 @EnableAutoConfiguration
-@Controller
-@EnableTransactionManagement
+//@Controller
+//@EnableTransactionManagement
 public class Spring1Application {
-	public final static String FUCKYOUMOROCCOIDIOTHACKER="FUCKYOUMOROCCOIDIOTHACKER";
+	public final static String KEY="KEY";
 	public static void main(String[] args) {
 		SpringApplication.run(Spring1Application.class, args);
 	}
-	@GetMapping("/")
-	public ModelAndView test() {
-		ModelAndView mv = new ModelAndView("index");
-		System.out.println("main");
-		return mv;
-	}
+//	@GetMapping("/")
+//	public ModelAndView test() {
+//		ModelAndView mv = new ModelAndView("index");
+//		System.out.println("main");
+//		return mv;
+//	}
 
 //    @Bean
 //    LocalSessionFactoryBean sessionFactory() {

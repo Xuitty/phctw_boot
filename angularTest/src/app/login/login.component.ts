@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Student } from '../bean/student';
 import { CookieService } from 'ngx-cookie-service';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -39,7 +40,7 @@ export class LoginComponent {
     this.log('enter triggered');
   }
 
-  doLogin() {
+  async doLogin() {
     this.paramInit();
     var sno: string = this.sno?.nativeElement.value;
     var spwd: string = this.spwd?.nativeElement.value;
@@ -55,21 +56,36 @@ export class LoginComponent {
 
     let options = { observe: 'response' as 'response', headers: headers };
 
-    this.http.post<Student>(url, body).subscribe((data) => {
-      this.log(data);
-      if (data.sid == null) {
-        this.message = '帳號/密碼錯誤';
-        return;
-      } else if (data.active == 0) {
-        this.message = '帳號未驗證';
-        return;
-      }
-      // this.message = '歡迎 ' + data.sname;
-      let studentCookie = data.cookie;
-      this.cookie.set('username', studentCookie!, 7);
-      this.log('end');
-      location.href = 'main';
-    });
+    // this.http.post<Student>(url, body).subscribe((data) => {
+    //   this.log(data);
+    //   if (data.sid == null) {
+    //     this.message = '帳號/密碼錯誤';
+    //     return;
+    //   } else if (data.active == 0) {
+    //     this.message = '帳號未驗證';
+    //     return;
+    //   }
+    //   // this.message = '歡迎 ' + data.sname;
+    //   let studentCookie = data.cookie;
+    //   this.cookie.set('username', studentCookie!, 7);
+    //   this.log('end');
+    //   location.href = 'main';
+    // });
+    let data_receive: Student;
+    let r = await lastValueFrom(this.http.post<Student>(url, body));
+
+    if (r.sid == null) {
+      this.message = '帳號/密碼錯誤';
+      return;
+    } else if (r.active == 0) {
+      this.message = '帳號未驗證';
+      return;
+    }
+    // this.message = '歡迎 ' + data.sname;
+    let studentCookie = r.cookie;
+    this.cookie.set('username', studentCookie!, 7);
+    this.log('end');
+    location.href = 'main';
   }
 
   // test(s: Student) {

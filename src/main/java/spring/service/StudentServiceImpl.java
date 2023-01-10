@@ -91,7 +91,7 @@ public class StudentServiceImpl implements StudentService {
 		if (queryStudent(acc) != null) {
 			String salt = queryStudent(acc).getSalt_pass();
 			pass = md5.string2MD5(pass + salt);
-			Boolean r = studentDAOInterface.findBySnoAndSpwdAndActive(acc, pass, 1) == null ? false : true;
+			Boolean r = studentDAOInterface.findBySnoAndSpwd(acc, pass) == null ? false : true;
 			return r;
 		}
 		return false;
@@ -183,7 +183,7 @@ public class StudentServiceImpl implements StudentService {
 		if (cookie == null) {
 			return null;
 		}
-		System.out.println(cookie);
+//		System.out.println(cookie);
 		String r = (studentDAOInterface.findByCookie(cookie)).getSno();
 		return r;
 	}
@@ -414,7 +414,7 @@ public class StudentServiceImpl implements StudentService {
 		String subject = "學生管理系統註冊驗證碼";
 		String msg = "親愛的 " + sname + "，您的驗證碼為: " + verify;
 		final String from = "sopdf2@gmail.com";
-		final String password = Spring1Application.FUCKYOUMOROCCOIDIOTHACKER;
+		final String password = Spring1Application.KEY;
 		Properties props = new Properties();
 		props.setProperty("mail.transport.protocol", "smtp");
 		props.setProperty("mail.host", "smtp.gmail.com");
@@ -464,7 +464,7 @@ public class StudentServiceImpl implements StudentService {
 		String subject = "學生管理系統補發密碼";
 		String msg = "親愛的 " + sname + "，您的新密碼為: " + newPassword;
 		final String from = "sopdf2@gmail.com";
-		final String password = Spring1Application.FUCKYOUMOROCCOIDIOTHACKER;
+		final String password = Spring1Application.KEY;
 
 		Properties props = new Properties();
 		props.setProperty("mail.transport.protocol", "smtp");
