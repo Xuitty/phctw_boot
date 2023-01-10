@@ -1,0 +1,186 @@
+<ng-container *ngIf="action == 'register'">
+  <body id="body">
+    <h2 id="result" class="text-center" style="color: red; size: 20px">
+      {{ message }}
+    </h2>
+    <form action="register" method="post">
+      <div class="container-fluid">
+        <div class="row mb-3">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4 form-floating">
+            <input
+              #sno
+              type="text"
+              class="form-control {{ snoError }}"
+              id="sno"
+              name="sno"
+              placeholder="A000001"
+              [disabled]="formSwitch"
+            />
+            <label for="sno">　帳號(學號)</label>
+          </div>
+          <div class="col-sm-4"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4 form-floating">
+            <input
+              #spwd
+              type="password"
+              class="form-control {{ spwdError }}"
+              id="spwd"
+              name="spwd"
+              placeholder="A000001"
+              [disabled]="formSwitch"
+            />
+            <label for="spwd">　密碼</label>
+          </div>
+          <div class="col-sm-4"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4 form-floating">
+            <input
+              #spwdc
+              type="password"
+              class="form-control {{ spwdError }}"
+              id="spwdc"
+              name="spwdc"
+              placeholder="A000001"
+              [disabled]="formSwitch"
+            />
+            <label for="spwdc">　確認密碼</label>
+          </div>
+          <div class="col-sm-4"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4 form-floating">
+            <input
+              #sname
+              type="text"
+              class="form-control {{ snameError }}"
+              id="sname"
+              name="sname"
+              placeholder="A000001"
+              [disabled]="formSwitch"
+            />
+            <label for="spwdc">　姓名</label>
+          </div>
+          <div class="col-sm-4"></div>
+        </div>
+
+        <fieldset class="row mb-3">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4 d-flex justify-content-center">
+            <legend class="col-form-label pt-0">性別</legend>
+            <input #ssex type="hidden" value="{{ ssex_receive }}" />
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="ssex"
+                id="gridRadios1"
+                value="0"
+                (click)="sex_select(0)"
+                checked
+                [disabled]="formSwitch"
+              />
+              <label class="form-check-label" for="gridRadios1">女</label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="ssex"
+                id="gridRadios2"
+                value="1"
+                (click)="sex_select(1)"
+                [disabled]="formSwitch"
+              />
+              <label class="form-check-label" for="gridRadios2">男</label>
+            </div>
+          </div>
+          <div class="col-sm-4"></div>
+        </fieldset>
+        <div class="row mb-3">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4">
+            <label for="sbday">出生日期</label>
+            <input
+              #sbday
+              id="sbday"
+              name="sbday"
+              class="form-control  {{ sbdayError }}"
+              type="date"
+              [disabled]="formSwitch"
+            />
+          </div>
+          <div class="col-sm-4"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4 form-floating">
+            <input
+              #smail
+              type="email"
+              class="form-control  {{ smailError }}"
+              id="smail"
+              name="smail"
+              placeholder="A000001@"
+              [disabled]="formSwitch"
+            />
+            <label for="smail">　電子郵件</label>
+          </div>
+          <div class="col-sm-4"></div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4 form-floating">
+            <input
+              #sid
+              type="text"
+              class="form-control {{ sidError }}"
+              id="sid"
+              name="sid"
+              placeholder="A000001"
+              [disabled]="formSwitch"
+            />
+            <label for="smail">　身份證字號</label>
+          </div>
+          <div class="col-sm-4"></div>
+        </div>
+
+        <div class="d-flex justify-content-center mb-3">
+          <input
+            id="button"
+            value="送出"
+            class="btn btn-primary"
+            (click)="doRegister()"
+            [disabled]="formSwitch"
+          />
+        </div>
+      </div>
+    </form>
+  </body>
+</ng-container>
+
+<ng-container *ngIf="action == 'verify'">
+  <body>
+    <div class="allCenter">
+      <h2>請至您的信箱收取驗證碼完成註冊程序</h2>
+      <br />
+      <h2 id="result" class="text-center" style="color: red; size: 20px">
+        {{ message }}
+      </h2>
+      <div>
+        <form action="register" method="post">
+          <br />
+          驗證碼:<input #verify type="text" name="verify" /><br />
+          <br />
+          <input type="button" value="送出" (click)="doVerify(verifySno)" />
+        </form>
+      </div>
+    </div>
+  </body>
+</ng-container>

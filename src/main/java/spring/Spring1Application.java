@@ -26,7 +26,7 @@ import jakarta.persistence.EntityManagerFactory;
 @Controller
 @EnableTransactionManagement
 public class Spring1Application {
-
+	public final static String FUCKYOUMOROCCOIDIOTHACKER="FUCKYOUMOROCCOIDIOTHACKER";
 	public static void main(String[] args) {
 		SpringApplication.run(Spring1Application.class, args);
 	}

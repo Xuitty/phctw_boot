@@ -1,0 +1,53 @@
+<ng-container *ngIf="action == 'main'">
+  <body>
+    <div class="allCenter">
+      <h3>{{ message }}</h3>
+      <br /><br /><br /><br />
+      學號:　{{ sno }}　　<br /><br />
+      姓名:　{{ sname }}<br /><br />
+      生日:　{{ sbday }}　(yyyy-mm-dd)<br /><br />
+      性別:　{{ ssex }}<br /><br />
+      E-mail:　{{ smail }}<br /><br />
+      身分證字號:　{{ sid }}<br /><br /><br /><br />
+      <form action="login">
+        <input name="sno" type="hidden" value="${sno}" /><input
+          name="buttonAction"
+          type="hidden"
+          value="mainResetPassword"
+        /><input value="重設密碼" type="button" (click)="goResetPassword()" />
+      </form>
+      <br /><br />
+      <input type="button" value="登出" (click)="doLogout()" />
+    </div>
+  </body>
+</ng-container>
+
+<ng-container *ngIf="action == 'resetPassword'">
+  <body>
+    <div class="allCenter">
+      <div>
+        <br /><br />
+        <h2 style="color: red">{{ message }}</h2>
+        <br /><br /><br /><br />
+        <form action="login" method="post">
+          舊密碼:　<input
+            #resetPasswordOld
+            type="password"
+            name="oldPassword"
+          /><br /><br />
+          新密碼:　<input
+            #resetPasswordNew
+            type="password"
+            name="newPassword"
+          /><br /><br />
+          確認新密碼:　<input
+            #resetPasswordNewConfirm
+            type="password"
+            name="confirmNewPassword"
+          /><br /><br />
+          <input value="送出" type="button" (click)="doResetPassword()" />
+        </form>
+      </div>
+    </div>
+  </body>
+</ng-container>

@@ -49,9 +49,9 @@
 				
 			  </form>
 <br><br>
-			<button class="btn btn-outline-secondary value="忘記密碼"
+			<button class="btn btn-outline-secondary" value="忘記密碼"
 				onclick="location.href='/login?buttonAction=forgetPasswordLogin';">忘記密碼?</button>
-				<button type="button" class="btn btn-outline-secondary value="重發驗證信"
+				<button type="button" class="btn btn-outline-secondary" value="重發驗證信"
 				onclick="location.href='/register?buttonAction=resendLogin';">重發驗證信</button>
 			</center>
 			</div>

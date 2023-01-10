@@ -10,6 +10,8 @@ public interface StudentDAOInterface extends JpaRepository<Student, String> {
 
 	Student findBySno(String sno); // queryStudent
 
+	Student findBySid(String sid); // queryStudent
+	
 	Student findByCookie(String cookie); // queryCookie
 
 }

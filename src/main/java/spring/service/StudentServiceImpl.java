@@ -22,6 +22,7 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
+import spring.Spring1Application;
 import spring.bean.Student;
 import spring.bean.Verify;
 import spring.dao.StudentDAOInterface;
@@ -50,7 +51,7 @@ public class StudentServiceImpl implements StudentService {
 		String salt = saltGen();
 		student.setSpwd(md5.string2MD5(student.getSpwd() + salt));
 		student.setSalt_pass(salt);
-		boolean r = studentDAOInterface.save(student)==null?false:true;
+		boolean r = studentDAOInterface.save(student) == null ? false : true;
 		return r;
 	}
 
@@ -58,7 +59,7 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public Boolean updateStudent(Student student) {
 //		StudentDAO s = new StudentDAO();
-		Boolean r = studentDAOInterface.save(student)==null?false:true;
+		Boolean r = studentDAOInterface.save(student) == null ? false : true;
 		return r;
 	}
 
@@ -77,12 +78,23 @@ public class StudentServiceImpl implements StudentService {
 
 	@Transactional
 	@Override
+	public Student queryStudentBySid(String sid) {
+//		StudentDAO s = new StudentDAO();
+		Student r = studentDAOInterface.findBySid(sid);
+		return r;
+	}
+
+	@Transactional
+	@Override
 	public Boolean loginStudent(String acc, String pass) {
 		// TODO Auto-generated method stub
-		String salt = queryStudent(acc).getSalt_pass();
-		pass = md5.string2MD5(pass + salt);
-		Boolean r = studentDAOInterface.findBySnoAndSpwdAndActive(acc, pass, 1)==null?false:true;
-		return r;
+		if (queryStudent(acc) != null) {
+			String salt = queryStudent(acc).getSalt_pass();
+			pass = md5.string2MD5(pass + salt);
+			Boolean r = studentDAOInterface.findBySnoAndSpwdAndActive(acc, pass, 1) == null ? false : true;
+			return r;
+		}
+		return false;
 	}
 
 	@Transactional
@@ -90,8 +102,8 @@ public class StudentServiceImpl implements StudentService {
 	public Boolean writeVerify(Student student) {
 		String verify = verifyGen();
 		sendVerify(student.getSname(), student.getSmail(), verify);
-		Verify v= new Verify(student.getSno(),verify);
-		Boolean r = verifyDAOInterface.save(v)==null?false:true;
+		Verify v = new Verify(student.getSno(), verify);
+		Boolean r = verifyDAOInterface.save(v) == null ? false : true;
 		return r;
 	}
 
@@ -116,7 +128,7 @@ public class StudentServiceImpl implements StudentService {
 	public Boolean activeAccount(String sno) {
 		Student s = studentDAOInterface.findBySno(sno);
 		s.setActive(1);
-		Boolean r = studentDAOInterface.save(s)==null?false:true;
+		Boolean r = studentDAOInterface.save(s) == null ? false : true;
 		return r;
 	}
 
@@ -129,7 +141,7 @@ public class StudentServiceImpl implements StudentService {
 			String salt = saltGen();
 			s.setSpwd(new MD5Tools().string2MD5(newPassword + salt));
 			s.setSalt_pass(salt);
-			Boolean r = studentDAOInterface.save(s)==null?false:true;
+			Boolean r = studentDAOInterface.save(s) == null ? false : true;
 			System.out.println(r);
 			sendNewPassword(sno, studentDAOInterface.findBySno(sno).getSmail(), newPassword);
 			return r == true ? true : false;
@@ -168,7 +180,7 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	@Transactional
 	public String queryCookie(String cookie) {
-		if(cookie==null) {
+		if (cookie == null) {
 			return null;
 		}
 		System.out.println(cookie);
@@ -402,14 +414,13 @@ public class StudentServiceImpl implements StudentService {
 		String subject = "學生管理系統註冊驗證碼";
 		String msg = "親愛的 " + sname + "，您的驗證碼為: " + verify;
 		final String from = "sopdf2@gmail.com";
-		final String password = "gtclesnkitaxafed";
-
+		final String password = Spring1Application.FUCKYOUMOROCCOIDIOTHACKER;
 		Properties props = new Properties();
 		props.setProperty("mail.transport.protocol", "smtp");
 		props.setProperty("mail.host", "smtp.gmail.com");
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.port", "465");
-		props.put("mail.debug", "true");
+//		props.put("mail.debug", "true");
 		props.put("mail.smtp.socketFactory.port", "465");
 		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 		props.put("mail.smtp.socketFactory.fallback", "false");
@@ -453,14 +464,14 @@ public class StudentServiceImpl implements StudentService {
 		String subject = "學生管理系統補發密碼";
 		String msg = "親愛的 " + sname + "，您的新密碼為: " + newPassword;
 		final String from = "sopdf2@gmail.com";
-		final String password = "gtclesnkitaxafed";
+		final String password = Spring1Application.FUCKYOUMOROCCOIDIOTHACKER;
 
 		Properties props = new Properties();
 		props.setProperty("mail.transport.protocol", "smtp");
 		props.setProperty("mail.host", "smtp.gmail.com");
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.port", "465");
-		props.put("mail.debug", "true");
+//		props.put("mail.debug", "true");
 		props.put("mail.smtp.socketFactory.port", "465");
 		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 		props.put("mail.smtp.socketFactory.fallback", "false");

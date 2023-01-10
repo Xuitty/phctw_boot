@@ -16,6 +16,8 @@ public interface StudentService {
 	public Boolean deleteStudent(String sno); // 刪除學生資料
 
 	public Student queryStudent(String sno); // 查詢學生資料
+	
+	public Student queryStudentBySid(String sid);
 
 	public Boolean loginStudent(String acc, String pass); // 學生登入檢查
 
@@ -34,5 +36,6 @@ public interface StudentService {
 	public String addCookie(String sno);
 
 	public String queryCookie(String cookie);
+
 
 }
