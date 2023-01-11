@@ -229,9 +229,11 @@ export class LoginComponent {
       sno: forgetPasswordSno,
       smail: forgetPasswordSmail,
     };
-    let r = await lastValueFrom(
-      this.http.post(url, body, { observe: 'response', responseType: 'text' })
-    );
+    let options = {
+      observe: 'response' as 'response',
+      responseType: 'text' as 'text',
+    };
+    let r = await lastValueFrom(this.http.post(url, body, options));
     if (r.body != 'false' && r.body != null && r.body != '') {
       if (r.body == 'snoNotExist') {
         this.message = '帳號不存在';
@@ -253,6 +255,7 @@ export class LoginComponent {
             '新密碼已經發送至信箱，' + t + '秒後將跳轉至首頁，請使用新密碼登入';
           if (t == 0) {
             clearInterval(counter);
+            this.cookie.deleteAll();
             location.href = '/login;';
           }
         }, 1000);

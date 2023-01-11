@@ -12,6 +12,7 @@ import { MainComponent } from './main/main.component';
 import { DataService } from './service/data.service';
 import { RegisterComponent } from './register/register.component';
 import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,7 @@ import { FormsModule } from '@angular/forms';
     MainComponent,
     RegisterComponent,
   ],
-  imports: [BrowserModule, HttpClientModule, AppRoutingModule, FormsModule],
+  imports: [BrowserModule, HttpClientModule, AppRoutingModule, FormsModule, NgbModule],
   providers: [TitleSenderService, DataService],
   bootstrap: [AppComponent],
 })

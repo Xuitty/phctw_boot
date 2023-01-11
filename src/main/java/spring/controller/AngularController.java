@@ -91,7 +91,7 @@ public class AngularController {
 	public String verifyAjax(@RequestBody String s) {
 		Student student = gson.fromJson(s, Student.class);
 		Verify verify = new Verify(student.getSno(), student.getSid());
-		if(studentService.queryStudent(verify.getSno()).getActive()==1) {
+		if (studentService.queryStudent(verify.getSno()).getActive() == 1) {
 			return "alredyActive";
 		}
 		if (verify.getVerify().equals(studentService.queryVerify(verify.getSno()))) {
@@ -102,35 +102,54 @@ public class AngularController {
 		}
 		return "false";
 	}
-	
+
 	@PostMapping("resend_ajax")
 	public String resendAjax(@RequestBody String s) {
 		Student student = gson.fromJson(s, Student.class);
-		if(studentService.queryStudent(student.getSno())==null) {
+		if (studentService.queryStudent(student.getSno()) == null) {
 			return "snoNotExist";
 		}
-		if(!(studentService.queryStudent(student.getSno()).getSmail().equals((student.getSmail())))) {
+		if (!(studentService.queryStudent(student.getSno()).getSmail().equals((student.getSmail())))) {
 			return "wrongSmail";
 		}
-		if(studentService.queryStudent(student.getSno()).getActive()==1) {
+		if (studentService.queryStudent(student.getSno()).getActive() == 1) {
 			return "alredyActive";
 		}
 		studentService.writeVerify(studentService.queryStudent(student.getSno()));
 		return "true";
 	}
-	
+
 	@PostMapping("forgetPassword_ajax")
 	public String forgetPasswordAjax(@RequestBody String s) {
 		Student student = gson.fromJson(s, Student.class);
-		System.out.println(student);
-		if(studentService.queryStudent(student.getSno())==null) {
+//		System.out.println(student);
+		if (studentService.queryStudent(student.getSno()) == null) {
 			return "snoNotExist";
 		}
-		if(!(studentService.queryStudent(student.getSno()).getSmail().equals(student.getSmail()))) {
+		if (!(studentService.queryStudent(student.getSno()).getSmail().equals(student.getSmail()))) {
 			return "wrongSmail";
 		}
 		studentService.forgetPassword(student.getSno(), student.getSmail());
+		student = studentService.queryStudent(student.getSno());
+		student.setCookie(null);
+		student.setSalt(null);
+		studentService.updateStudent(student);
 		return "true";
+	}
+
+	@PostMapping("resetPassword_ajax")
+	public String resetPasswordAjax(@RequestBody String s) {
+		Student student = gson.fromJson(s, Student.class);
+		System.out.println(student);
+		if (studentService.resetPassword(student.getSno(), student.getSpwd(), student.getSid()) == true) {
+			student = studentService.queryStudent(student.getSno());
+			student.setCookie(null);
+			student.setSalt(null);
+			studentService.updateStudent(student);
+			return "true";
+		} else {
+			return "false";
+		}
 	}
 
 }

@@ -34,18 +34,32 @@
             #resetPasswordOld
             type="password"
             name="oldPassword"
+            [disabled]="formSwitch"
           /><br /><br />
           新密碼:　<input
             #resetPasswordNew
             type="password"
             name="newPassword"
+            [disabled]="formSwitch"
           /><br /><br />
           確認新密碼:　<input
             #resetPasswordNewConfirm
             type="password"
             name="confirmNewPassword"
-          /><br /><br />
-          <input value="送出" type="button" (click)="doResetPassword()" />
+            [disabled]="formSwitch"
+          /><br /><br /><input
+            style="margin: 10px"
+            value="送出"
+            type="button"
+            (click)="doResetPassword()"
+            [style.display]="submitSwitch"
+          />
+          <input
+            style="margin: 10px"
+            value="返回"
+            type="button"
+            onclick="location.href='/main'"
+          />
         </form>
       </div>
     </div>

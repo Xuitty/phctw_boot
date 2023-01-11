@@ -26,7 +26,7 @@ import jakarta.persistence.EntityManagerFactory;
 //@Controller
 //@EnableTransactionManagement
 public class Spring1Application {
-	public final static String KEY="KEY";
+	public final static String KEY="uxbjiicybrrjxcyr";
 	public static void main(String[] args) {
 		SpringApplication.run(Spring1Application.class, args);
 	}
