@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Student } from '../bean/student';
 import { CookieService } from 'ngx-cookie-service';
-import { lastValueFrom, Observable, tap } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -212,8 +212,8 @@ export class RegisterComponent {
       this.http.post(url, body, { observe: 'response', responseType: 'text' })
     );
     if (r.body != 'false' && r.body != null && r.body != '') {
-      if(r.body=='alredyActive'){
-        this.message='帳號已啟用，不須再啟用';
+      if (r.body == 'alredyActive') {
+        this.message = '帳號已啟用，不須再啟用';
         return;
       }
       this.cookie.set('username', r.body, 7);
