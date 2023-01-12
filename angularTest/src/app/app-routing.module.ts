@@ -5,18 +5,37 @@ import { IndexComponent } from './index/index.component';
 import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
 import { RegisterComponent } from './register/register.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
 
 const routes: Routes = [
-  { path: '', component: IndexComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'main', component: MainComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: '**', component: NotFoundComponent, pathMatch: 'full' },
-  { path: '**', redirectTo: '/404' },
+  { path: '', component: IndexComponent, data: { animation: 'indexPage' } },
+  {
+    path: 'login',
+    component: LoginComponent,
+    data: { animation: 'loginPage' },
+  },
+  { path: 'main', component: MainComponent, data: { animation: 'mainPage' } },
+  {
+    path: 'register',
+    component: RegisterComponent,
+    data: { animation: 'registerPage' },
+  },
+  {
+    path: '**',
+    component: NotFoundComponent,
+    pathMatch: 'full',
+    data: { animation: '404Page' },
+  },
+  // { path: '**', redirectTo: '/404' },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    RouterModule.forRoot(routes),
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

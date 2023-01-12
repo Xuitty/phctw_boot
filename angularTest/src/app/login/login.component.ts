@@ -118,11 +118,15 @@ export class LoginComponent {
         this.verifySwitch = 'disabled';
         if (smail.length > 6 && smail.includes('@')) {
           this.resendButtonSwitch = '';
+        } else {
+          this.resendButtonSwitch = 'none';
         }
       } else if (sno.length > 0 && verify.length > 0) {
         this.smailSwitch = 'disabled';
         if (verify.length == 6) {
           this.verifyButtonSwitch = '';
+        } else {
+          this.verifyButtonSwitch = 'none';
         }
       }
     }
@@ -179,6 +183,11 @@ export class LoginComponent {
       this.http.post(url, body, { observe: 'response', responseType: 'text' })
     );
     if (r.body != 'false' && r.body != null && r.body != '') {
+      if (r.body == 'snoNotExist') {
+        this.message = '帳號不存在';
+        this.i = 0;
+        return;
+      }
       if (r.body == 'alredyActive') {
         this.message = '帳號已啟用，不須再啟用';
         this.i = 0;
@@ -239,12 +248,16 @@ export class LoginComponent {
         this.message = '帳號不存在';
         this.verifyButtonSwitch = '';
         this.resendButtonSwitch = '';
+        this.smailSwitch = '';
+        this.verifySwitch = '';
         return;
       }
       if (r.body == 'wrongSmail') {
         this.message = '信箱錯誤，請重新確認';
         this.verifyButtonSwitch = '';
         this.resendButtonSwitch = '';
+        this.smailSwitch = '';
+        this.verifySwitch = '';
         return;
       }
       if (r.body == 'true') {

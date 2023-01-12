@@ -70,7 +70,7 @@
           <div class="col-sm-4"></div>
         </div>
 
-        <fieldset class="row mb-3">
+        <!-- <fieldset class="row mb-3">
           <div class="col-sm-4"></div>
           <div class="col-sm-4 d-flex justify-content-center">
             <legend class="col-form-label pt-0">性別</legend>
@@ -102,7 +102,13 @@
             </div>
           </div>
           <div class="col-sm-4"></div>
-        </fieldset>
+        </fieldset> -->
+        <div class="row mb-3">
+          <div class="col-sm-4"></div>
+          <div class="col-sm-4 text-center"></div>
+          <div class="col-sm-4"></div>
+        </div>
+
         <!-- <div class="row mb-3">
           <div class="col-sm-4"></div>
           <div class="col-sm-4">
@@ -118,10 +124,13 @@
           </div>
           <div class="col-sm-4"></div>
         </div> -->
-        <div class="row mb-3">
+        <div class="row mb-3 row">
           <div class="col-sm-4"></div>
-          <div class="col-sm-4">
+          <div class="col-sm-2 form-floating">
             <ngbd-datepicker-popup></ngbd-datepicker-popup>
+          </div>
+          <div class="col-sm-2" style="text-align: center">
+            <ngbd-dropdown-basic></ngbd-dropdown-basic>
           </div>
           <div class="col-sm-4"></div>
         </div>
@@ -160,7 +169,7 @@
 
         <div class="d-flex justify-content-center mb-3">
           <input
-            id="button"
+            type="button"
             value="送出"
             class="btn btn-primary"
             (click)="doRegister()"

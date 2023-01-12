@@ -1,0 +1,23 @@
+<form class="row row-cols-sm-auto">
+  <div class="input-group form-floating">
+    <input
+      id="date"
+      class="form-control {{sbdayError}}"
+      placeholder="yyyy-mm-dd"
+      name="dp"
+      [minDate]="{year: 1950, month: 1, day: 1}"
+      [maxDate]="{year: 2010, month: 12, day: 31}"
+      [(ngModel)]="model"
+      ngbDatepicker
+      #d="ngbDatepicker"
+    />
+    <label for="date">　出生年月日</label>
+    <button
+      class="btn btn-outline-secondary bi bi-calendar3"
+      (click)="d.toggle()"
+      type="button"
+    >
+      <img src="../../assets/calendar.png" width="20" />
+    </button>
+  </div>
+</form>

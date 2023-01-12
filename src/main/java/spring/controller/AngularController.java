@@ -91,6 +91,11 @@ public class AngularController {
 	public String verifyAjax(@RequestBody String s) {
 		Student student = gson.fromJson(s, Student.class);
 		Verify verify = new Verify(student.getSno(), student.getSid());
+		System.out.println(verify);
+		System.out.println(studentService.queryStudent(verify.getSno()));
+		if ((studentService.queryStudent(verify.getSno())) == null) {
+			return "snoNotExist";
+		}
 		if (studentService.queryStudent(verify.getSno()).getActive() == 1) {
 			return "alredyActive";
 		}

@@ -12,20 +12,29 @@ import { MainComponent } from './main/main.component';
 import { DataService } from './service/data.service';
 import { RegisterComponent } from './register/register.component';
 import { FormsModule } from '@angular/forms';
-import { NgbdDatepickerPopup } from "./datepicker-popup/datepicker-popup";
+import { NgbdDatepickerPopup } from './bootstrap/datepicker-popup/datepicker-popup';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgbdDropdownBasic } from './bootstrap/dropdown-basic/dropdown-basic';
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        NotFoundComponent,
-        IndexComponent,
-        LoginComponent,
-        MainComponent,
-        RegisterComponent,
-    ],
-    providers: [TitleSenderService, DataService],
-    bootstrap: [AppComponent],
-    imports: [BrowserModule, HttpClientModule, AppRoutingModule, FormsModule, NgbdDatepickerPopup]
+  declarations: [
+    AppComponent,
+    NotFoundComponent,
+    IndexComponent,
+    LoginComponent,
+    MainComponent,
+    RegisterComponent,
+  ],
+  providers: [TitleSenderService, DataService],
+  bootstrap: [AppComponent],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    AppRoutingModule,
+    FormsModule,
+    NgbdDatepickerPopup,
+    BrowserAnimationsModule,
+    NgbdDropdownBasic,
+  ],
 })
 export class AppModule {}
-//

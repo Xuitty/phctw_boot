@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col">
+    <div ngbDropdown class="d-inline-block">
+      <input
+        type="button"
+        [value]="value"
+        [class]="class"
+        id="dropdownBasic1"
+        ngbDropdownToggle
+      />
+
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <button ngbDropdownItem (click)="female();">女</button>
+        <button ngbDropdownItem (click)="male();">男</button>
+      </div>
+    </div>
+  </div>
+</div>

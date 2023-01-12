@@ -3,6 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Student } from '../bean/student';
 import { CookieService } from 'ngx-cookie-service';
 import { lastValueFrom } from 'rxjs';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbdDatepickerPopup } from '../bootstrap/datepicker-popup/datepicker-popup';
+import { NgbdDropdownBasic } from '../bootstrap/dropdown-basic/dropdown-basic';
 
 @Component({
   selector: 'app-register',
@@ -22,6 +25,9 @@ export class RegisterComponent {
   @ViewChild('smail') smail_native?: ElementRef;
   @ViewChild('sid') sid_native?: ElementRef;
   @ViewChild('verify') verify?: ElementRef;
+
+  @ViewChild(NgbdDatepickerPopup) date_native?: NgbdDatepickerPopup;
+  @ViewChild(NgbdDropdownBasic) sex_native?: NgbdDropdownBasic;
   message?: string;
   action: string = 'register';
   verifySno: string = '';
@@ -37,6 +43,8 @@ export class RegisterComponent {
   smailError: string = '';
   sidError: string = '';
   async doRegister() {
+    this.message = '';
+    this.date_native?.clearError();
     this.snoError = '';
     this.spwdError = '';
     this.snameError = '';
@@ -48,10 +56,49 @@ export class RegisterComponent {
     s_detect.spwd = this.spwd_native?.nativeElement.value;
     let spwdc = this.spwdc_native?.nativeElement.value;
     s_detect.sname = this.sname_native?.nativeElement.value;
-    s_detect.ssex = this.ssex_native?.nativeElement.value;
-    s_detect.sbday = this.sbday_native?.nativeElement.value;
+    // s_detect.ssex = this.ssex_native?.nativeElement.value;
+    if (this.sex_native?.value_int == -1) {
+      this.message = '請選擇性別';
+      this.sex_native.getError();
+      return;
+    }
+    s_detect.ssex = this.sex_native?.value_int;
+    this.log(this.date_native?.model?.year);
+    this.log(this.date_native?.model?.month);
+    this.log(this.date_native?.model?.day);
+    if (
+      this.date_native?.model?.year == null ||
+      this.date_native?.model?.year == undefined ||
+      this.date_native?.model?.month == null ||
+      this.date_native?.model?.month == undefined ||
+      this.date_native?.model?.day == null ||
+      this.date_native?.model?.day == undefined
+    ) {
+      this.date_native?.getError();
+      this.message = '日期格式錯誤';
+      return;
+    }
+    // if (
+    //   this.date_native.model.year > 2010 ||
+    //   this.date_native.model.year < 1950 ||
+    //   this.date_native.model.month < 1 ||
+    //   this.date_native.model.month > 12
+    // ) {
+    //   this.sbdayError = 'is-invalid';
+    //   this.message = '日期格式錯誤';
+    //   return;
+    // }
+    s_detect.sbday =
+      this.date_native?.model?.year.toString().padStart(4, '0') +
+      '-' +
+      this.date_native?.model?.month.toString().padStart(2, '0') +
+      '-' +
+      this.date_native?.model?.day.toString().padStart(2, '0');
     s_detect.smail = this.smail_native?.nativeElement.value;
     s_detect.sid = this.sid_native?.nativeElement.value;
+
+    // let date = this.date_native?.model;
+    this.log(s_detect.sbday);
 
     // this.log(s_detect);
     let r = await this.detect(s_detect, spwdc);
@@ -97,7 +144,8 @@ export class RegisterComponent {
     }
     if (r == 'BdayError') {
       this.message = '出生日期年份錯誤';
-      this.sbdayError = 'is-invalid';
+      // this.sbdayError = 'is-invalid';
+      this.date_native?.getError();
       return;
     }
 
